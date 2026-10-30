@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Почему ты моя любимая девочка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --night:#241638; --dusk:#3b2257; --rose:#e8728f; --sun:#ffc94d; --peach:#ffd9b8; --text:#fbeee6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(120% 80% at 50% 0%,var(--dusk),var(--night) 70%) fixed var(--night);color:var(--text);font-family:Lora,Georgia,serif;line-height:1.6;min-height:100vh}
+main{max-width:34rem;margin:0 auto;padding:2.5rem 1.25rem 4rem;text-align:center}
+.sun{width:7.5rem;height:7.5rem;margin:1rem auto 1.5rem;border-radius:50%;background:radial-gradient(circle at 40% 35%,#fff3b0,var(--sun) 55%,#f59e3b);box-shadow:0 0 0 .9rem rgba(255,201,77,.12),0 0 0 1.9rem rgba(255,201,77,.07),0 0 4rem rgba(255,201,77,.45);animation:rise 1.6s ease-out both}
+@keyframes rise{from{transform:translateY(2.5rem);opacity:0}to{transform:none;opacity:1}}
+h1{font-family:Caveat,cursive;font-weight:700;font-size:clamp(2.6rem,11vw,4rem);line-height:1.05;margin:0 0 .5rem;color:var(--peach)}
+.sub{margin:0 auto 2rem;max-width:26rem;color:#e9d5df}
+.counter{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin:0 0 .6rem}
+.counter div{background:rgba(255,255,255,.07);border:1px solid rgba(255,201,77,.25);border-radius:1rem;padding:.7rem .2rem}
+.counter b{display:block;font-size:1.7rem;font-weight:600;color:var(--sun);font-variant-numeric:tabular-nums}
+.counter span{font-size:.8rem;color:#e9d5df}
+.since{font-size:.9rem;color:#cbb3c6;margin:0 0 3rem}
+.stage{min-height:13rem;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.5rem 1.2rem;border-radius:1.5rem;background:linear-gradient(160deg,rgba(232,114,143,.22),rgba(255,201,77,.08));border:1px solid rgba(232,114,143,.4)}
+.reason{font-size:1.25rem;margin:0;animation:fade .6s ease both}
+.reason em{display:block;font-family:Caveat,cursive;font-style:normal;font-size:1.6rem;color:var(--sun);margin-bottom:.4rem}
+@keyframes fade{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+button{font:inherit;font-weight:600;font-size:1.05rem;margin-top:1.4rem;padding:.9rem 1.8rem;border:0;border-radius:2rem;background:var(--sun);color:#3a2300;cursor:pointer;min-height:3rem}
+button:hover{background:#ffd777}
+button:focus-visible{outline:3px solid var(--peach);outline-offset:3px}
+.progress{margin-top:.9rem;font-size:.9rem;color:#cbb3c6}
+.final{margin-top:3rem;display:none}
+.final.on{display:block;animation:fade 1s ease both}
+.final p{font-size:1.2rem}
+.sign{font-family:Caveat,cursive;font-size:2.2rem;color:var(--rose);margin-top:1rem}
+.heart{display:inline-block;color:var(--rose)}
+@media (prefers-reduced-motion:no-preference){.heart{animation:beat 1.4s ease-in-out infinite}@keyframes beat{50%{transform:scale(1.25)}}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="sun" aria-hidden="true"></div>
+  <h1>Солнышко, почему ты моя любимая девочка</h1>
+  <p class="sub">Я собрал для тебя несколько причин. Нажимай кнопку и читай по одной.</p>
+
+  <div class="counter" aria-label="Сколько мы вместе">
+    <div><b id="cY">0</b><span id="lY">лет</span></div>
+    <div><b id="cM">0</b><span id="lM">месяцев</span></div>
+    <div><b id="cD">0</b><span id="lD">дней</span></div>
+    <div><b id="cH">0</b><span id="lH">часов</span></div>
+  </div>
+  <p class="since">Мы вместе с 11 июля 2023 года, и я считаю каждую минуту</p>
+
+  <section class="stage" aria-live="polite">
+    <p class="reason" id="reason"><em>Солнышко,</em>нажми кнопку, и я расскажу</p>
+    <button id="next" type="button">Первая причина</button>
+    <div class="progress" id="progress"></div>
+  </section>
+
+  <section class="final" id="final">
+    <p>Это не все причины. Их столько, что за одну жизнь я не успею их все назвать, но я постараюсь.</p>
+    <p>Спасибо, что ты есть, любимая <span class="heart">♥</span></p>
+    <div class="sign">Твой любимый человек</div>
+  </section>
+</main>
+
+<script>
+// Причины можно менять на свои: просто правь тексты ниже.
+const REASONS = [
+  "Ты улыбаешься так, что у меня сразу становится хорошо на душе, даже если день был тяжёлым.",
+  "Рядом с тобой я становлюсь лучше. Хочется стараться, расти и делать всё для нас.",
+  "Ты умеешь поддержать одним словом, и мне сразу становится легче.",
+  "С тобой интересно даже молчать. Мне не нужно ничего придумывать, чтобы нам было хорошо.",
+  "Ты красивая, и не только снаружи. У тебя очень доброе сердце.",
+  "Твой смех — мой любимый звук на свете.",
+  "Ты веришь в меня, даже когда я сам в себе сомневаюсь.",
+  "Ты делаешь обычные дни особенными, а особенные — незабываемыми.",
+  "С тобой я чувствую себя дома, где бы мы ни были.",
+  "Ты просто ты, и этого достаточно, чтобы я любил тебя каждый день сильнее."
+];
+
+const START = new Date(2023, 6, 11, 0, 0, 0);
+function plural(n, a, b, c){
+  const m10 = n % 10, m100 = n % 100;
+  if (m100 >= 11 && m100 <= 14) return c;
+  if (m10 === 1) return a;
+  if (m10 >= 2 && m10 <= 4) return b;
+  return c;
+}
+function tick(){
+  const now = new Date();
+  let y = now.getFullYear() - START.getFullYear();
+  let m = now.getMonth() - START.getMonth();
+  let d = now.getDate() - START.getDate();
+  if (d < 0){ m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+  if (m < 0){ y--; m += 12; }
+  const h = now.getHours();
+  const set = (id, v, lid, forms) => {
+    document.getElementById(id).textContent = v;
+    if (lid) document.getElementById(lid).textContent = plural(v, forms[0], forms[1], forms[2]);
+  };
+  set('cY', y, 'lY', ['год','года','лет']);
+  set('cM', m, 'lM', ['месяц','месяца','месяцев']);
+  set('cD', d, 'lD', ['день','дня','дней']);
+  set('cH', h, 'lH', ['час','часа','часов']);
+}
+tick(); setInterval(tick, 60000);
+
+let i = 0;
+const reasonEl = document.getElementById('reason');
+const btn = document.getElementById('next');
+const prog = document.getElementById('progress');
+const fin = document.getElementById('final');
+btn.addEventListener('click', () => {
+  if (i < REASONS.length){
+    const clone = document.createElement('p');
+    clone.className = 'reason';
+    clone.id = 'reason';
+    clone.innerHTML = '<em>Причина ' + (i + 1) + '</em>' + REASONS[i];
+    document.getElementById('reason').replaceWith(clone);
+    i++;
+    prog.textContent = i + ' из ' + REASONS.length;
+    btn.textContent = i < REASONS.length ? 'Ещё одна' : 'И самое главное';
+    window.reasonRef = clone;
+  } else {
+    fin.classList.add('on');
+    btn.style.display = 'none';
+    fin.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+});
+</script>
+</body>
+</html>
